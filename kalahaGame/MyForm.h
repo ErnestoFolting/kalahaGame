@@ -317,7 +317,7 @@ namespace kalahaGame {
 			this->button12->Name = L"button12";
 			this->button12->Size = System::Drawing::Size(134, 88);
 			this->button12->TabIndex = 6;
-			this->button12->Text = L"6";
+			this->button12->Text = L"30";
 			this->button12->UseVisualStyleBackColor = false;
 			// 
 			// statusStrip1
@@ -538,6 +538,7 @@ namespace kalahaGame {
 	cli::array<Button^>^ buttons = gcnew cli::array<Button^>(14);
 	private: void disableButtons();
 	private: void update(table tb);
+	private: void buttonToMove(int buttonNumber);
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);

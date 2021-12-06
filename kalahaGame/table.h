@@ -13,18 +13,21 @@ struct table
 				i = -1;
 				continue;
 			}
-			tableVector[i]+=1;
+			if (id == 1 && i == 6) {
+				continue;
+			}
+			tableVector[i] += 1;
+			if (id == 1 && i == (tableVector.size() - 1)) {
+				i = -1;
+			}
 			stones--;
 			if (stones == 0)break;
 		}
 	}
-	table() {
+	table(vector<int> vec) {
 		for (int i = 0; i < 14; i++) {
-			tableVector.push_back(6);
+			tableVector.push_back(vec[i]);
 		}
-		tableVector[0] = 20;
-		tableVector[6] = 0;
-		tableVector[13] = 0;
 	}
 	
 };
