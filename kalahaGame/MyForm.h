@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "table.h"
+
 namespace kalahaGame {
 
 	using namespace System;
@@ -535,6 +537,7 @@ namespace kalahaGame {
 #pragma endregion
 	cli::array<Button^>^ buttons = gcnew cli::array<Button^>(14);
 	private: void disableButtons();
+	private: void update(table tb);
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);

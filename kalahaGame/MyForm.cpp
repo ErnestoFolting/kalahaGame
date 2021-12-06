@@ -15,6 +15,14 @@ void kalahaGame::MyForm::disableButtons()
 		}
 }
 
+void kalahaGame::MyForm::update(table tb)
+{
+	buttons[0]->Text = Convert::ToString(145);
+	for (int i = 0; i < tb.tableVector.size();i++) {
+		buttons[i]->Text = Convert::ToString(tb.tableVector[i]);
+	}
+}
+
 System::Void kalahaGame::MyForm::MyForm_Load(System::Object^ sender, System::EventArgs^ e)
 {
 	
@@ -38,7 +46,9 @@ System::Void kalahaGame::MyForm::button1_Click(System::Object^ sender, System::E
 {
 	disableButtons();
 	status->Text = "Computer's move";
-	
+	table tb;
+	tb.move(0, 0);
+	update(tb);
 }
 
 System::Void kalahaGame::MyForm::button2_Click(System::Object^ sender, System::EventArgs^ e)
