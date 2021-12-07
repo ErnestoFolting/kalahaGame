@@ -35,7 +35,7 @@ struct table
 		//------------------------------
 
 		//If last stone in your blank cell
-		if (id == 0 && lastId < 6 && tableVector[lastId] == 1  ) {
+		if (id == 0 && lastId < 6 && tableVector[lastId] == 1 && tableVector[12 - lastId] != 0) {
 			tableVector[lastId] = 0;
 			tableVector[6] += 1;
 			tableVector[6] += tableVector[12 - lastId];
@@ -44,7 +44,7 @@ struct table
 		//--------------------------------
 
 		//If last stone in computer's blank cell
-		if (id == 1 && lastId < 13 && lastId > 6 && tableVector[lastId] == 1) {
+		if (id == 1 && lastId < 13 && lastId > 6 && tableVector[lastId] == 1 && tableVector[12 - lastId] != 0) {
 			tableVector[lastId] = 0;
 			tableVector[13] += 1;
 			tableVector[13] += tableVector[12 - lastId];
