@@ -501,7 +501,7 @@ namespace kalahaGame {
 			// 
 			// timer1
 			// 
-			this->timer1->Interval = 3000;
+			this->timer1->Interval = 1000;
 			this->timer1->Tick += gcnew System::EventHandler(this, &MyForm::timer1_Tick);
 			// 
 			// MyForm
@@ -557,11 +557,12 @@ namespace kalahaGame {
 	private: void update(table tb);
 	private: void playerMove(int buttonNumber);
 	private: void computerMove(table tb);
-	private: int computerFindCellToMove();
+	private: vector<int> computerFindCellsToMove(table tb);
 	private: bool finishCheck(table tb);
 	private: void finishOfGame();
-	private: bool minimaxGameOverCheck(table tb);
-	private: int staticEvaluation(table tb);
+	private: bool minimaxGameOverCheck(child c);
+	private: int staticEvaluation(child c);
+	private: int minimax(child position, int depth, int alpha, int beta, bool maximizingPlayer);
 	private: vector<child> kalahaGame::MyForm::childrenFromPosition(child root);
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);

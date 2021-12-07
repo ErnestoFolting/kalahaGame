@@ -25,13 +25,22 @@ void kalahaGame::MyForm::enableButtons()
 
 void kalahaGame::MyForm::update(table tb)
 {
+	for (int i = 0; i < tb.tableVector.size(); i++) {
+		buttons[i]->BackColor = System::Drawing::Color::White;
+
+	}
 	for (int i = 0; i < tb.tableVector.size();i++) {
+		if (buttons[i]->Text != Convert::ToString(tb.tableVector[i])) {
+			buttons[i]->BackColor = System::Drawing::Color::Bisque;
+		}
 		buttons[i]->Text = Convert::ToString(tb.tableVector[i]);
+		
 	}
 }
 
 void kalahaGame::MyForm::playerMove(int buttonNumber)
 {
+	status->BackColor = System::Drawing::Color::White;
 	disableButtons();
 	vector<int> vec;
 	for (int i = 0; i < 14; i++) {
@@ -67,30 +76,33 @@ System::Void kalahaGame::MyForm::timer1_Tick(System::Object^ sender, System::Eve
 
 void kalahaGame::MyForm::computerMove(table tb)
 {
-	int cellToMove = computerFindCellToMove();
-
-	while (!tb.move(1, cellToMove) && !finishCheck(tb)) {
-		update(tb);
-		cellToMove = computerFindCellToMove();
+	vector<int> cellsToMove = computerFindCellsToMove(tb);
+	//MessageBox::Show(Convert::ToString(cellsToMove[0]),"check cellsToMove"); //----------------------------
+	for (int i = 0; i < cellsToMove.size(); i++) {
+		if (!finishCheck(tb))
+		tb.move(1, cellsToMove[i]);
 	}
 	update(tb);
 	if (!finishCheck(tb)) {
 		status->Text = "Your move!";
 		enableButtons();
-	}
+	}	
 }
 
-int kalahaGame::MyForm::computerFindCellToMove()
+vector<int> kalahaGame::MyForm::computerFindCellsToMove(table tb)
 {
-	bool flag = false;
-	int cellToMove;
-	while (!flag) {
-		cellToMove = rand() % 6 + 7;
-		if (Convert::ToInt32(buttons[cellToMove]->Text) != 0) {
-			flag = true;
+	vector<int> cellsToMove;
+	child temp;
+	temp.state = tb.tableVector;
+	vector<child> children = childrenFromPosition(temp);
+	//MessageBox::Show(Convert::ToString(children[0].path[0]), "check child[0]"); //----------------------------
+	int cellWithEvalToMove = minimax(temp, 1, -100, 100, true);
+	//MessageBox::Show(Convert::ToString(cellWithEvalToMove), "check minimax"); //----------------------------
+	for (int i = 0; i < children.size(); i++) {
+		if (children[i].state[13] - children[i].state[6] == cellWithEvalToMove) {
+			return children[i].path;
 		}
 	}
-	return cellToMove;
 }
 
 bool kalahaGame::MyForm::finishCheck(table tb)
@@ -105,10 +117,10 @@ bool kalahaGame::MyForm::finishCheck(table tb)
 	}
 
 	if (tb.tableVector[6] >= 37) {
-		MessageBox::Show("You have won.", "Congrats!");
+		status->Text = "Congrats! You have won.";
 	}
 	else if (tb.tableVector[13] >= 37) {
-		MessageBox::Show("The computer has won.", "Not bad, but...");
+		status->Text = "Not bad, but...The computer has won.";  
 	}else if(!computerMoves || !playerMoves){
 		for (int i = 0; i < 6;i++) {
 			tb.tableVector[6] += tb.tableVector[i];
@@ -119,13 +131,13 @@ bool kalahaGame::MyForm::finishCheck(table tb)
 			tb.tableVector[i] = 0;
 		}
 		if (tb.tableVector[6] > tb.tableVector[13]) {
-			MessageBox::Show("Moves are over. You have won.", "Congrats!");
+			status->Text = "Congrats! Moves are over.You have won.";
 		}
 		else if (tb.tableVector[13] > tb.tableVector[6]) {
-			MessageBox::Show("Moves are over. Computer has won.", "Not bad, but...");
+			status->Text = "Not bad, but...Moves are over. Computer has won.";  
 		}
 		else {
-			MessageBox::Show("Friends are winning", "Draw!");
+			status->Text = "Draw! Friends are winning";
 		}
 	}
 	else {
@@ -147,20 +159,25 @@ void kalahaGame::MyForm::finishOfGame()
 	}
 	buttons[6]->Text = Convert::ToString(0);
 	buttons[13]->Text = Convert::ToString(0);
-	status->Text = "Your move";
+	for (int i = 0; i <14; i++) {
+		buttons[i]->BackColor = System::Drawing::Color::White;
+
+	}
+	status->BackColor = System::Drawing::Color::Yellow;
+
 }
 
-bool kalahaGame::MyForm::minimaxGameOverCheck(table tb)
+bool kalahaGame::MyForm::minimaxGameOverCheck(child c)
 {
-	if (tb.tableVector[6] >= 37 || tb.tableVector[13] >= 37)return true;
+	if (c.state[6] >= 37 || c.state[13] >= 37)return true;
 
 	bool computerMoves = 0;
 	bool playerMoves = 0;
 	for (int i = 0; i < 6; i++) {
-		if (tb.tableVector[i] != 0)playerMoves = 1;
+		if (c.state[i] != 0)playerMoves = 1;
 	}
 	for (int i = 7; i < 13; i++) {
-		if (tb.tableVector[i] != 0)computerMoves = 1;
+		if (c.state[i] != 0)computerMoves = 1;
 	}
 
 	if (!computerMoves || !playerMoves) {
@@ -171,9 +188,43 @@ bool kalahaGame::MyForm::minimaxGameOverCheck(table tb)
 	}
 }
 
-int kalahaGame::MyForm::staticEvaluation(table tb)
+int kalahaGame::MyForm::staticEvaluation(child c)
 {
-	int evaluation = (tb.tableVector[13] - tb.tableVector[6]);
+	int evaluation = (c.state[13] - c.state[6]);
+	return evaluation;
+}
+
+int kalahaGame::MyForm::minimax(child position, int depth, int alpha, int beta, bool maximizingPlayer)
+{
+	if (depth == 0 || minimaxGameOverCheck(position)) {
+		return staticEvaluation(position);
+	}
+	if (maximizingPlayer) {
+		int maxEval = -100;
+		vector<child>children = childrenFromPosition(position);
+		for (int i = 0; i < children.size(); i++) {
+			int eval = minimax(children[i], depth - 1, alpha, beta, false);
+			maxEval = max(maxEval, eval);
+			alpha = max(alpha, eval);
+			if (beta <= alpha) {
+				break;
+			}
+		}
+		return maxEval;
+	}
+	else {
+		int minEval = 100;
+		vector<child>children = childrenFromPosition(position);
+		for (int i = 0; i < children.size(); i++) {
+			int eval = minimax(children[i], depth - 1, alpha, beta, true);
+			int minEval = min(minEval, eval);
+			beta = min(beta, eval);
+			if (beta <= alpha) {
+				break;
+			}
+		}
+		return minEval;
+	}
 }
 
 vector<child> kalahaGame::MyForm::childrenFromPosition(child root)
