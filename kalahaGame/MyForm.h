@@ -552,6 +552,8 @@ namespace kalahaGame {
 	private: void playerMove(int buttonNumber);
 	private: void computerMove(table tb);
 	private: int computerFindCellToMove();
+	private: bool finishCheck(table tb);
+	private: void finishOfGame();
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);

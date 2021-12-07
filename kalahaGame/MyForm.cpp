@@ -41,11 +41,15 @@ void kalahaGame::MyForm::playerMove(int buttonNumber)
 	if (tb.move(0, buttonNumber)) { // 0 - player, 1 - computer
 		update(tb);
 		status->Text = "Computer's move. Waiting...";
-		timer1->Start();
+		if (!finishCheck(tb)) {
+			timer1->Start();
+		}
 	}
 	else {
 		update(tb);
-		enableButtons();
+		if (!finishCheck(tb)) {
+			enableButtons();
+		}
 	}
 }
 
@@ -65,13 +69,15 @@ void kalahaGame::MyForm::computerMove(table tb)
 {
 	int cellToMove = computerFindCellToMove();
 
-	while (!tb.move(1, cellToMove)) {
+	while (!tb.move(1, cellToMove) && !finishCheck(tb)) {
 		update(tb);
 		cellToMove = computerFindCellToMove();
 	}
 	update(tb);
-	status->Text = "Your move!";
-	enableButtons();
+	if (!finishCheck(tb)) {
+		status->Text = "Your move!";
+		enableButtons();
+	}
 }
 
 int kalahaGame::MyForm::computerFindCellToMove()
@@ -85,6 +91,61 @@ int kalahaGame::MyForm::computerFindCellToMove()
 		}
 	}
 	return cellToMove;
+}
+
+bool kalahaGame::MyForm::finishCheck(table tb)
+{
+	bool computerMoves = 0;
+	bool playerMoves = 0;
+	for (int i = 0; i < 6; i++) {
+		if (tb.tableVector[i] != 0)playerMoves = 1;
+	}
+	for (int i = 7; i < 13; i++) {
+		if (tb.tableVector[i] != 0)computerMoves = 1;
+	}
+
+	if (tb.tableVector[6] >= 37) {
+		MessageBox::Show("You have won.", "Congrats!");
+	}
+	else if (tb.tableVector[13] >= 37) {
+		MessageBox::Show("The computer has won.", "Not bad, but...");
+	}else if(!computerMoves || !playerMoves){
+		for (int i = 0; i < 6;i++) {
+			tb.tableVector[6] += tb.tableVector[i];
+			tb.tableVector[i] = 0;
+		}
+		for (int i = 7; i < 13; i++) {
+			tb.tableVector[13] += tb.tableVector[i];
+			tb.tableVector[i] = 0;
+		}
+		if (tb.tableVector[6] > tb.tableVector[13]) {
+			MessageBox::Show("Moves are over. You have won.", "Congrats!");
+		}
+		else if (tb.tableVector[13] > tb.tableVector[6]) {
+			MessageBox::Show("Moves are over. Computer has won.", "Not bad, but...");
+		}
+		else {
+			MessageBox::Show("Friends are winning", "Draw!");
+		}
+	}
+	else {
+		return false;
+	}
+	finishOfGame();
+	return true;
+}
+
+void kalahaGame::MyForm::finishOfGame()
+{
+	enableButtons();
+	for (int i = 0; i < 14; i++) {
+		if (i != 6 && i != 13) {
+			buttons[i]->Text = Convert::ToString(6);
+		}
+	}
+	buttons[6]->Text = Convert::ToString(0);
+	buttons[13]->Text = Convert::ToString(0);
+	status->Text = "Your move";
 }
 
 System::Void kalahaGame::MyForm::MyForm_Load(System::Object^ sender, System::EventArgs^ e)
