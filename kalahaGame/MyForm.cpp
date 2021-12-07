@@ -1,5 +1,6 @@
 #include "MyForm.h"
 #include <Windows.h>
+
 using namespace kalahaGame; // Название проекта
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Application::EnableVisualStyles();
@@ -15,6 +16,13 @@ void kalahaGame::MyForm::disableButtons()
 		}
 }
 
+void kalahaGame::MyForm::enableButtons()
+{
+	for (int i = 0; i < 6; i++) {
+		buttons[i]->Enabled = true;
+	}
+}
+
 void kalahaGame::MyForm::update(table tb)
 {
 	for (int i = 0; i < tb.tableVector.size();i++) {
@@ -22,22 +30,54 @@ void kalahaGame::MyForm::update(table tb)
 	}
 }
 
-void kalahaGame::MyForm::buttonToMove(int buttonNumber)
+void kalahaGame::MyForm::playerMove(int buttonNumber)
 {
+	disableButtons();
 	vector<int> vec;
 	for (int i = 0; i < 14; i++) {
 		vec.push_back(Convert::ToInt32(buttons[i]->Text));
 	}
 	table tb(vec);
-	disableButtons();
-	status->Text = "Computer's move";
-	tb.move(1, buttonNumber);
+	if (tb.move(0, buttonNumber)) { // 0 - player, 1 - computer
+		update(tb);
+		status->Text = "Computer's move";
+		computerMove(tb);
+	}
+	else {
+		update(tb);
+		enableButtons();
+	}
+}
+
+void kalahaGame::MyForm::computerMove(table tb)
+{
+	int cellToMove = computerFindCellToMove();
+
+	while (!tb.move(1, cellToMove)) {
+		update(tb);
+		cellToMove = computerFindCellToMove();
+	}
 	update(tb);
+	status->Text = "Your move";
+	enableButtons();
+}
+
+int kalahaGame::MyForm::computerFindCellToMove()
+{
+	bool flag = false;
+	int cellToMove;
+	while (!flag) {
+		cellToMove = rand() % 6 + 7;
+		if (Convert::ToInt32(buttons[cellToMove]->Text) != 0) {
+			flag = true;
+		}
+	}
+	return cellToMove;
 }
 
 System::Void kalahaGame::MyForm::MyForm_Load(System::Object^ sender, System::EventArgs^ e)
 {
-	
+	srand(time(0));
 	buttons[0] = button1;
 	buttons[1] = button2;
 	buttons[2] = button3;
@@ -56,30 +96,60 @@ System::Void kalahaGame::MyForm::MyForm_Load(System::Object^ sender, System::Eve
 
 System::Void kalahaGame::MyForm::button1_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	buttonToMove(12);
+	if (Convert::ToInt32(button1->Text) == 0) {
+		MessageBox::Show("Please, choose a cell with stones", "Oops!");
+	}
+	else {
+		playerMove(0);
+	}
 }
 
 System::Void kalahaGame::MyForm::button2_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	buttonToMove(1);
+	if (Convert::ToInt32(button2->Text) == 0) {
+		MessageBox::Show("Please, choose a cell with stones", "Oops!");
+	}
+	else {
+		playerMove(1);
+	}
 }
 
 System::Void kalahaGame::MyForm::button3_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	buttonToMove(2);
+	if (Convert::ToInt32(button3->Text) == 0) {
+		MessageBox::Show("Please, choose a cell with stones", "Oops!");
+	}
+	else {
+		playerMove(2);
+	}
 }
 
 System::Void kalahaGame::MyForm::button4_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	buttonToMove(3);
+	if (Convert::ToInt32(button4->Text) == 0) {
+		MessageBox::Show("Please, choose a cell with stones", "Oops!");
+	}
+	else {
+		playerMove(3);
+	}
 }
 
 System::Void kalahaGame::MyForm::button5_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	buttonToMove(4);
+	if (Convert::ToInt32(button5->Text) == 0) {
+		MessageBox::Show("Please, choose a cell with stones", "Oops!");
+	}
+	else {
+		playerMove(4);
+	}
 }
 
 System::Void kalahaGame::MyForm::button6_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	buttonToMove(5);
+	if (Convert::ToInt32(button6->Text) == 0) {
+		MessageBox::Show("Please, choose a cell with stones", "Oops!");
+	}
+	else {
+		playerMove(5);
+	}
 }

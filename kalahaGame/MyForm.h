@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "table.h"
+#include <ctime>
 
 namespace kalahaGame {
 
@@ -156,7 +157,7 @@ namespace kalahaGame {
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(134, 88);
 			this->button2->TabIndex = 1;
-			this->button2->Text = L"6";
+			this->button2->Text = L"4";
 			this->button2->UseVisualStyleBackColor = false;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
@@ -172,7 +173,7 @@ namespace kalahaGame {
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(134, 88);
 			this->button3->TabIndex = 2;
-			this->button3->Text = L"6";
+			this->button3->Text = L"11";
 			this->button3->UseVisualStyleBackColor = false;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
@@ -188,7 +189,7 @@ namespace kalahaGame {
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(134, 88);
 			this->button4->TabIndex = 3;
-			this->button4->Text = L"6";
+			this->button4->Text = L"10";
 			this->button4->UseVisualStyleBackColor = false;
 			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
 			// 
@@ -204,7 +205,7 @@ namespace kalahaGame {
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(134, 88);
 			this->button5->TabIndex = 4;
-			this->button5->Text = L"6";
+			this->button5->Text = L"9";
 			this->button5->UseVisualStyleBackColor = false;
 			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
 			// 
@@ -220,7 +221,7 @@ namespace kalahaGame {
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(134, 88);
 			this->button6->TabIndex = 5;
-			this->button6->Text = L"6";
+			this->button6->Text = L"8";
 			this->button6->UseVisualStyleBackColor = false;
 			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
@@ -237,7 +238,7 @@ namespace kalahaGame {
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(134, 88);
 			this->button7->TabIndex = 11;
-			this->button7->Text = L"6";
+			this->button7->Text = L"13";
 			this->button7->UseVisualStyleBackColor = false;
 			// 
 			// button8
@@ -253,7 +254,7 @@ namespace kalahaGame {
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(134, 88);
 			this->button8->TabIndex = 10;
-			this->button8->Text = L"6";
+			this->button8->Text = L"13";
 			this->button8->UseVisualStyleBackColor = false;
 			// 
 			// button9
@@ -269,7 +270,7 @@ namespace kalahaGame {
 			this->button9->Name = L"button9";
 			this->button9->Size = System::Drawing::Size(134, 88);
 			this->button9->TabIndex = 9;
-			this->button9->Text = L"6";
+			this->button9->Text = L"13";
 			this->button9->UseVisualStyleBackColor = false;
 			// 
 			// button10
@@ -285,7 +286,7 @@ namespace kalahaGame {
 			this->button10->Name = L"button10";
 			this->button10->Size = System::Drawing::Size(134, 88);
 			this->button10->TabIndex = 8;
-			this->button10->Text = L"6";
+			this->button10->Text = L"13";
 			this->button10->UseVisualStyleBackColor = false;
 			// 
 			// button11
@@ -301,7 +302,7 @@ namespace kalahaGame {
 			this->button11->Name = L"button11";
 			this->button11->Size = System::Drawing::Size(134, 88);
 			this->button11->TabIndex = 7;
-			this->button11->Text = L"6";
+			this->button11->Text = L"13";
 			this->button11->UseVisualStyleBackColor = false;
 			// 
 			// button12
@@ -317,7 +318,7 @@ namespace kalahaGame {
 			this->button12->Name = L"button12";
 			this->button12->Size = System::Drawing::Size(134, 88);
 			this->button12->TabIndex = 6;
-			this->button12->Text = L"30";
+			this->button12->Text = L"13";
 			this->button12->UseVisualStyleBackColor = false;
 			// 
 			// statusStrip1
@@ -537,8 +538,11 @@ namespace kalahaGame {
 #pragma endregion
 	cli::array<Button^>^ buttons = gcnew cli::array<Button^>(14);
 	private: void disableButtons();
+	private: void enableButtons();
 	private: void update(table tb);
-	private: void buttonToMove(int buttonNumber);
+	private: void playerMove(int buttonNumber);
+	private: void computerMove(table tb);
+	private: int computerFindCellToMove();
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);
