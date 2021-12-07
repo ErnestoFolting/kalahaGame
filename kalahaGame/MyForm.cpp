@@ -77,7 +77,6 @@ System::Void kalahaGame::MyForm::timer1_Tick(System::Object^ sender, System::Eve
 void kalahaGame::MyForm::computerMove(table tb)
 {
 	vector<int> cellsToMove = computerFindCellsToMove(tb);
-	//MessageBox::Show(Convert::ToString(cellsToMove[0]),"check cellsToMove"); //----------------------------
 	for (int i = 0; i < cellsToMove.size(); i++) {
 		if (!finishCheck(tb))
 		tb.move(1, cellsToMove[i]);
@@ -94,15 +93,10 @@ vector<int> kalahaGame::MyForm::computerFindCellsToMove(table tb)
 	vector<int> cellsToMove;
 	child temp;
 	temp.state = tb.tableVector;
+	
 	vector<child> children = childrenFromPosition(temp);
-	//MessageBox::Show(Convert::ToString(children[0].path[0]), "check child[0]"); //----------------------------
-	int cellWithEvalToMove = minimax(temp, 1, -100, 100, true);
-	//MessageBox::Show(Convert::ToString(cellWithEvalToMove), "check minimax"); //----------------------------
-	for (int i = 0; i < children.size(); i++) {
-		if (children[i].state[13] - children[i].state[6] == cellWithEvalToMove) {
-			return children[i].path;
-		}
-	}
+	int cellWithEvalToMove = minimax(temp, 10, -100, 100, true)[1];	
+	return children[cellWithEvalToMove].path;
 }
 
 bool kalahaGame::MyForm::finishCheck(table tb)
@@ -194,36 +188,48 @@ int kalahaGame::MyForm::staticEvaluation(child c)
 	return evaluation;
 }
 
-int kalahaGame::MyForm::minimax(child position, int depth, int alpha, int beta, bool maximizingPlayer)
+vector<int> kalahaGame::MyForm::minimax(child position, int depth, int alpha, int beta, bool maximizingPlayer)
 {
 	if (depth == 0 || minimaxGameOverCheck(position)) {
-		return staticEvaluation(position);
+		vector<int> temp;
+		temp.push_back(staticEvaluation(position));
+		return temp;
 	}
 	if (maximizingPlayer) {
 		int maxEval = -100;
 		vector<child>children = childrenFromPosition(position);
+		int childPos = 0;
 		for (int i = 0; i < children.size(); i++) {
-			int eval = minimax(children[i], depth - 1, alpha, beta, false);
+			int eval = minimax(children[i], depth - 1, alpha, beta, false)[0];
+			if (eval > maxEval) childPos = i;
 			maxEval = max(maxEval, eval);
 			alpha = max(alpha, eval);
 			if (beta <= alpha) {
 				break;
 			}
 		}
-		return maxEval;
+		vector<int> temp;
+		temp.push_back(maxEval);
+		temp.push_back(childPos);
+		return temp;
 	}
 	else {
 		int minEval = 100;
 		vector<child>children = childrenFromPosition(position);
+		int childPos = 0;
 		for (int i = 0; i < children.size(); i++) {
-			int eval = minimax(children[i], depth - 1, alpha, beta, true);
-			int minEval = min(minEval, eval);
+			int eval = minimax(children[i], depth - 1, alpha, beta, true)[0];
+			if (eval < minEval) childPos = i;
+			minEval = min(minEval, eval);
 			beta = min(beta, eval);
 			if (beta <= alpha) {
 				break;
 			}
 		}
-		return minEval;
+		vector<int> temp;
+		temp.push_back(minEval);
+		temp.push_back(childPos);
+		return temp;
 	}
 }
 
@@ -235,7 +241,10 @@ vector<child> kalahaGame::MyForm::childrenFromPosition(child root)
 		if (root.state[i] != 0) {
 			child tempChild;
 			tempChild.path = root.path;
-			if (copy.move(1, i)) {
+			child temp2;
+			bool succsess = copy.move(1, i);
+			temp2.state = copy.tableVector;
+			if (succsess || minimaxGameOverCheck(temp2)) {
 				tempChild.state = copy.tableVector;
 				tempChild.path.push_back(i);
 				children.push_back(tempChild);
