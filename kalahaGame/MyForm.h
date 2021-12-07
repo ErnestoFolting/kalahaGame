@@ -3,6 +3,12 @@
 #include "table.h"
 #include <ctime>
 
+struct child {
+	vector<int> state;
+	vector<int> path;
+
+};
+
 namespace kalahaGame {
 
 	using namespace System;
@@ -554,6 +560,9 @@ namespace kalahaGame {
 	private: int computerFindCellToMove();
 	private: bool finishCheck(table tb);
 	private: void finishOfGame();
+	private: bool minimaxGameOverCheck(table tb);
+	private: int staticEvaluation(table tb);
+	private: vector<child> kalahaGame::MyForm::childrenFromPosition(child root);
 	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e);

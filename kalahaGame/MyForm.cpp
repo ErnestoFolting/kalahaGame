@@ -135,6 +135,8 @@ bool kalahaGame::MyForm::finishCheck(table tb)
 	return true;
 }
 
+
+
 void kalahaGame::MyForm::finishOfGame()
 {
 	enableButtons();
@@ -146,6 +148,58 @@ void kalahaGame::MyForm::finishOfGame()
 	buttons[6]->Text = Convert::ToString(0);
 	buttons[13]->Text = Convert::ToString(0);
 	status->Text = "Your move";
+}
+
+bool kalahaGame::MyForm::minimaxGameOverCheck(table tb)
+{
+	if (tb.tableVector[6] >= 37 || tb.tableVector[13] >= 37)return true;
+
+	bool computerMoves = 0;
+	bool playerMoves = 0;
+	for (int i = 0; i < 6; i++) {
+		if (tb.tableVector[i] != 0)playerMoves = 1;
+	}
+	for (int i = 7; i < 13; i++) {
+		if (tb.tableVector[i] != 0)computerMoves = 1;
+	}
+
+	if (!computerMoves || !playerMoves) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+int kalahaGame::MyForm::staticEvaluation(table tb)
+{
+	int evaluation = (tb.tableVector[13] - tb.tableVector[6]);
+}
+
+vector<child> kalahaGame::MyForm::childrenFromPosition(child root)
+{
+	vector<child> children;
+	for (int i = 7; i < 13; i++) {
+		table copy(root.state);
+		if (root.state[i] != 0) {
+			child tempChild;
+			tempChild.path = root.path;
+			if (copy.move(1, i)) {
+				tempChild.state = copy.tableVector;
+				tempChild.path.push_back(i);
+				children.push_back(tempChild);
+			}
+			else {
+				tempChild.state = copy.tableVector;
+				tempChild.path.push_back(i);
+				vector<child> recursiveChildren = childrenFromPosition(tempChild);
+				for (int i = 0; i < recursiveChildren.size(); i++) {
+					children.push_back(recursiveChildren[i]);
+				}
+			}
+		}	
+	}
+	return children;
 }
 
 System::Void kalahaGame::MyForm::MyForm_Load(System::Object^ sender, System::EventArgs^ e)
