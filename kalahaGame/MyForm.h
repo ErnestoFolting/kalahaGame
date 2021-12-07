@@ -68,6 +68,8 @@ namespace kalahaGame {
 	private: System::Windows::Forms::Label^ label10;
 	private: System::Windows::Forms::Label^ label11;
 	private: System::Windows::Forms::Label^ label12;
+	private: System::Windows::Forms::Timer^ timer1;
+	private: System::ComponentModel::IContainer^ components;
 
 
 
@@ -89,7 +91,7 @@ namespace kalahaGame {
 		/// <summary>
 		/// Обязательная переменная конструктора.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -98,6 +100,7 @@ namespace kalahaGame {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
@@ -126,6 +129,7 @@ namespace kalahaGame {
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->label12 = (gcnew System::Windows::Forms::Label());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->statusStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -157,7 +161,7 @@ namespace kalahaGame {
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(134, 88);
 			this->button2->TabIndex = 1;
-			this->button2->Text = L"4";
+			this->button2->Text = L"6";
 			this->button2->UseVisualStyleBackColor = false;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
@@ -173,7 +177,7 @@ namespace kalahaGame {
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(134, 88);
 			this->button3->TabIndex = 2;
-			this->button3->Text = L"11";
+			this->button3->Text = L"6";
 			this->button3->UseVisualStyleBackColor = false;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
@@ -189,7 +193,7 @@ namespace kalahaGame {
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(134, 88);
 			this->button4->TabIndex = 3;
-			this->button4->Text = L"10";
+			this->button4->Text = L"6";
 			this->button4->UseVisualStyleBackColor = false;
 			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
 			// 
@@ -205,7 +209,7 @@ namespace kalahaGame {
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(134, 88);
 			this->button5->TabIndex = 4;
-			this->button5->Text = L"9";
+			this->button5->Text = L"6";
 			this->button5->UseVisualStyleBackColor = false;
 			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
 			// 
@@ -221,7 +225,7 @@ namespace kalahaGame {
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(134, 88);
 			this->button6->TabIndex = 5;
-			this->button6->Text = L"8";
+			this->button6->Text = L"6";
 			this->button6->UseVisualStyleBackColor = false;
 			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
@@ -238,7 +242,7 @@ namespace kalahaGame {
 			this->button7->Name = L"button7";
 			this->button7->Size = System::Drawing::Size(134, 88);
 			this->button7->TabIndex = 11;
-			this->button7->Text = L"13";
+			this->button7->Text = L"6";
 			this->button7->UseVisualStyleBackColor = false;
 			// 
 			// button8
@@ -254,7 +258,7 @@ namespace kalahaGame {
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(134, 88);
 			this->button8->TabIndex = 10;
-			this->button8->Text = L"13";
+			this->button8->Text = L"6";
 			this->button8->UseVisualStyleBackColor = false;
 			// 
 			// button9
@@ -270,7 +274,7 @@ namespace kalahaGame {
 			this->button9->Name = L"button9";
 			this->button9->Size = System::Drawing::Size(134, 88);
 			this->button9->TabIndex = 9;
-			this->button9->Text = L"13";
+			this->button9->Text = L"6";
 			this->button9->UseVisualStyleBackColor = false;
 			// 
 			// button10
@@ -286,7 +290,7 @@ namespace kalahaGame {
 			this->button10->Name = L"button10";
 			this->button10->Size = System::Drawing::Size(134, 88);
 			this->button10->TabIndex = 8;
-			this->button10->Text = L"13";
+			this->button10->Text = L"6";
 			this->button10->UseVisualStyleBackColor = false;
 			// 
 			// button11
@@ -302,7 +306,7 @@ namespace kalahaGame {
 			this->button11->Name = L"button11";
 			this->button11->Size = System::Drawing::Size(134, 88);
 			this->button11->TabIndex = 7;
-			this->button11->Text = L"13";
+			this->button11->Text = L"6";
 			this->button11->UseVisualStyleBackColor = false;
 			// 
 			// button12
@@ -318,7 +322,7 @@ namespace kalahaGame {
 			this->button12->Name = L"button12";
 			this->button12->Size = System::Drawing::Size(134, 88);
 			this->button12->TabIndex = 6;
-			this->button12->Text = L"13";
+			this->button12->Text = L"6";
 			this->button12->UseVisualStyleBackColor = false;
 			// 
 			// statusStrip1
@@ -489,6 +493,11 @@ namespace kalahaGame {
 			this->label12->TabIndex = 26;
 			this->label12->Text = L"12";
 			// 
+			// timer1
+			// 
+			this->timer1->Interval = 3000;
+			this->timer1->Tick += gcnew System::EventHandler(this, &MyForm::timer1_Tick);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -550,5 +559,6 @@ namespace kalahaGame {
 	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e);
+	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e);
 };
 }

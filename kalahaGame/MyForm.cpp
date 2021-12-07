@@ -40,14 +40,26 @@ void kalahaGame::MyForm::playerMove(int buttonNumber)
 	table tb(vec);
 	if (tb.move(0, buttonNumber)) { // 0 - player, 1 - computer
 		update(tb);
-		status->Text = "Computer's move";
-		computerMove(tb);
+		status->Text = "Computer's move. Waiting...";
+		timer1->Start();
 	}
 	else {
 		update(tb);
 		enableButtons();
 	}
 }
+
+System::Void kalahaGame::MyForm::timer1_Tick(System::Object^ sender, System::EventArgs^ e)
+{
+	vector<int> vec;
+	for (int i = 0; i < 14; i++) {
+		vec.push_back(Convert::ToInt32(buttons[i]->Text));
+	}
+	table tb(vec);
+	computerMove(tb);
+	timer1->Stop();
+}
+
 
 void kalahaGame::MyForm::computerMove(table tb)
 {
@@ -58,7 +70,7 @@ void kalahaGame::MyForm::computerMove(table tb)
 		cellToMove = computerFindCellToMove();
 	}
 	update(tb);
-	status->Text = "Your move";
+	status->Text = "Your move!";
 	enableButtons();
 }
 
@@ -153,3 +165,4 @@ System::Void kalahaGame::MyForm::button6_Click(System::Object^ sender, System::E
 		playerMove(5);
 	}
 }
+
