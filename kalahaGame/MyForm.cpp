@@ -31,7 +31,7 @@ void kalahaGame::MyForm::update(table tb)
 	}
 	for (int i = 0; i < tb.tableVector.size();i++) {
 		if (buttons[i]->Text != Convert::ToString(tb.tableVector[i])) {
-			buttons[i]->BackColor = System::Drawing::Color::Bisque;
+			buttons[i]->BackColor = System::Drawing::Color::MediumPurple;
 		}
 		buttons[i]->Text = Convert::ToString(tb.tableVector[i]);
 		
@@ -73,6 +73,29 @@ System::Void kalahaGame::MyForm::timer1_Tick(System::Object^ sender, System::Eve
 	timer1->Stop();
 }
 
+System::Void kalahaGame::MyForm::button13_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	if (comboBox1->Text == "") {
+		MessageBox::Show("Please, select the level of difficulty", "Oops...");
+	}
+	else {
+		enableButtons();
+		button13->Visible = false;
+		comboBox1->Visible = false;
+		label13->Visible = false;
+		label14->Visible = true;
+		if (comboBox1->Text == "Easy peasy") {
+			label14->Text = "Difficulty: Easy Peasy.";
+		}
+		else if (comboBox1->Text == "Medium") {
+			label14->Text = "Difficulty: Medium.";
+		}
+		else {
+			label14->Text = "Difficulty: Overkill.";
+		}
+	}
+}
+
 
 void kalahaGame::MyForm::computerMove(table tb)
 {
@@ -95,7 +118,17 @@ vector<int> kalahaGame::MyForm::computerFindCellsToMove(table tb)
 	temp.state = tb.tableVector;
 	
 	vector<child> children = childrenFromPosition(temp);
-	int cellWithEvalToMove = minimax(temp, 10, -100, 100, true)[1];	
+	int difficulty;
+	if (comboBox1->Text == "Easy peasy") {
+		difficulty = 2;
+	}
+	else if (comboBox1->Text == "Medium") {
+		difficulty = 4;
+	}
+	else {
+		difficulty = 6;
+	}
+	int cellWithEvalToMove = minimax(temp, difficulty, -100, 100, true)[1];
 	return children[cellWithEvalToMove].path;
 }
 
@@ -158,7 +191,11 @@ void kalahaGame::MyForm::finishOfGame()
 
 	}
 	status->BackColor = System::Drawing::Color::Yellow;
-
+	disableButtons();
+	button13->Visible = true;
+	comboBox1->Visible = true;
+	label13->Visible = true;
+	label14->Visible = false;
 }
 
 bool kalahaGame::MyForm::minimaxGameOverCheck(child c)
@@ -279,6 +316,8 @@ System::Void kalahaGame::MyForm::MyForm_Load(System::Object^ sender, System::Eve
 	buttons[11] = button11;
 	buttons[12] = button12;
 	buttons[13] = kalaha2;
+
+	disableButtons();
 }
 
 System::Void kalahaGame::MyForm::button1_Click(System::Object^ sender, System::EventArgs^ e)
